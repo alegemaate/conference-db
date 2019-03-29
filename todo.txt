@@ -1,0 +1,2 @@
+
+    switch a session's day/time and/or location.

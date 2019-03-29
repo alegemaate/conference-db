@@ -1,0 +1,29 @@
+.sponsors {
+	padding: 10px;
+	background-color: #444;
+	font-size: 20px;
+}
+
+.sponsor {
+	margin: 10px;
+}
+
+.platinum:first-child {
+  content: "<h1>Platinum Sponsors</h1>";
+}
+
+.platinum {
+	color: #e0ebeb;
+}
+
+.gold {
+	color: #ff9900;
+}
+
+.silver {
+	color: #c2d6d6;
+}
+
+.bronze {
+	color: #cc6600;
+}

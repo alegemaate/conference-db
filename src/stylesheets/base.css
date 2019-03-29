@@ -1,0 +1,127 @@
+@font-face {
+  font-family: 'HelveticaBold';
+  src: url('../fonts/HelveticaNeue Bold.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/HelveticaNeue Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/HelveticaNeue Bold.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/HelveticaNeue Bold.woff2') format('woff2'), /* Modern Browsers */
+       url('../fonts/HelveticaNeue Bold.svg') format('svg'); /* SVG  */
+}
+
+@font-face {
+  font-family: 'Helvetica';
+  src: url('../fonts/HelveticaNeue Medium.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/HelveticaNeue Medium.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/HelveticaNeue Medium.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/HelveticaNeue Medium.woff2') format('woff2'), /* Modern Browsers */
+       url('../fonts/HelveticaNeue Medium.svg') format('svg'); /* SVG  */
+}
+
+body {
+  background-color: #2f292b;
+  width: 100%;
+  font-family: "Helvetica", sans-serif;
+  font-weight: 100;
+  color: #111;
+}
+
+p {
+  font-weight: 500;
+}
+
+input[type=text], input[type=email], input[type=date], input[type=time], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+  margin-right: 12px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  cursor: pointer;
+  margin-right: 12px;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+main {
+  width: 80%;
+  margin: 220px auto 0 auto;
+  background-color: #FFF;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h2 {
+  margin: 8px 0 15px 0;
+  font-size: 28px;
+  text-transform: uppercase;
+  font-family: "HelveticaBold", sans-serif;
+}
+
+.page-title {
+  margin: 0 0 -5px 0;
+  font-size: 40px;
+}
+
+.page-title-bottom {
+  margin: 0 0 15px 0;
+  font-size: 24px;
+}
+
+.container {
+  background-color: #dfe0e2;
+  padding: 20px;
+}
+
+.result {
+  font-family: "Consolas", sans-serif;
+  padding: 15px;
+  background-color: #CCC;
+  list-style-type: none;
+}
+
+.result ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.result .member {
+  color: #000;
+}
+
+.result .chair {
+  color: #F00;
+}
+
+.attendee {
+  margin: 5px 0 0 20px;
+}
+
+.job {
+  color: #FFF;
+  margin-left: 25px;
+  padding: 4px 0;
+}
+
+.job p {
+  margin: 0;
+  padding: 0;
+}
