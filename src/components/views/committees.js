@@ -1,96 +1,80 @@
-import { API_ROOT } from './../api-config'
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from "react";
 
-import Committee from '../entities/committee.js'
+import Committee from "../entities/committee.js";
 
-const API_PATH = API_ROOT + '/committee/read.php'
+import DbClient from "../DbClient";
+import { API_PATH_COMMITTEE } from "../../constants/endpoints";
 
-
-export default class CommitteeView extends Component {
-  // Ctor
-  constructor(props) {
-    super(props)
-    this.state = {
-      selectedCommittee: null,
-      committees: [],
-      error: null
-    }
-  }
+export default function CommitteeView() {
+  // State
+  const [selectedCommittee, setSelectedCommittee] = useState(null);
+  const [committees, setCommittees] = useState([]);
+  const [error, setError] = useState("");
 
   // Load up committees
-  componentDidMount() {
-    axios({
-      method: 'post',
-      url: `${API_PATH}`,
-      headers: { 'content-type': 'application/json' }
-    })
-      .then(result => {
-        const committees = Object.keys(result.data.body).map(
-          key => new Committee(result.data.body[key])
-        )
-        this.setState({ committees })
-      })
-      .catch(error => this.setState({ error: error.message }))
+  useEffect(() => {
+    async function fetch() {
+      const db = new DbClient();
+
+      try {
+        const { body } = await db.post(API_PATH_COMMITTEE);
+        setCommittees(Object.keys(body).map(key => new Committee(body[key])));
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+    fetch();
+  }, []);
+
+  // Select a given committee
+  function selectCommittee(id) {
+    return committees.find(com => com.state.id == id);
   }
 
   // Render page
-  render() {
-    return (
-      <div className="Comittee">
-        <h2 className="page-title">Committees</h2>
-        <h2 className="page-title-bottom">Who planned this?</h2>
-        <div>
-          <form action="#">
-            <label>Select a committee to view</label>
 
-            <select id="committee" name="committee"
-              onChange={
-                e => this.setState(
-                  {
-                    selectedCommittee: this.selectCommittee(e.target.value, 10)
-                  }
-                )
-              }
-            >
-              <option value="" disabled selected hidden> - Select a committee - </option>
-              {
-                // If the committee names have been received display them
-                this.state.committees &&
-                this.state.committees.map(com => (com.renderSelect()))
-              }
-            </select>
-            <div>
-              {
-                this.state.error &&
-                <div className="error">Sorry, an error occured. ({this.state.error})</div>
-              }
-            </div>
-          </form>
-        </div>
-        {
-          // If the committee names have been received display them
-          this.state.selectedCommittee &&
+  return (
+    <div className="Comittee">
+      <h2 className="page-title">Committees</h2>
+      <h2 className="page-title-bottom">Who planned this?</h2>
+      <div>
+        <form action="#">
+          <label>Select a committee to view</label>
+
+          <select
+            id="committee"
+            name="committee"
+            defaultValue=""
+            onChange={e =>
+              setSelectedCommittee(selectCommittee(e.target.value))
+            }
+          >
+            <option value="" disabled hidden>
+              {" - Select a committee - "}
+            </option>
+            {// Render committees list
+            committees.map(com => (
+              <option key={com.state.id} value={com.state.id}>
+                {com.state.name}
+              </option>
+            ))}
+          </select>
           <div>
-            <h2>{this.state.selectedCommittee.state.name}</h2>
-            <div className="result">
-              <ul>
-                {
-                  this.state.selectedCommittee.renderMembers()
-                }
-              </ul>
-            </div>
+            {error && (
+              <div className="error">Sorry, an error occured. ({error})</div>
+            )}
           </div>
-        }
+        </form>
       </div>
-    )
-  }
-
-  selectCommittee(id) {
-    return this.state.committees.find(
-      function (com) {
-        return com.state.id == id
-      }
-    )
-  }
+      {// If the committee names have been received display them
+      selectedCommittee && (
+        <div>
+          <h2>{selectedCommittee.state.name}</h2>
+          <div className="result">
+            <ul>{selectedCommittee.renderMembers()}</ul>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

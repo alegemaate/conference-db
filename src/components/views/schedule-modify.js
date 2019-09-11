@@ -1,178 +1,155 @@
-import { API_ROOT } from './../api-config'
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import moment from 'moment'
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
+import WeekCalendar from "react-week-calendar";
 
-require('./../../stylesheets/calendar.css')
+import "../../stylesheets/calendar.css";
 
-const API_PATH = API_ROOT + 'session/read.php'
-const API_PATH_UPDATE = API_ROOT + 'session/update.php'
+import DbClient from "../DbClient";
+import {
+  API_PATH_SESSION,
+  API_PATH_SESSION_UPDATE
+} from "../../constants/endpoints";
 
 // Scheduling
-export default class ScheduleModifyView extends Component {
-  constructor(props) {
-    super(props)
+export default function ScheduleModifyView() {
+  // State
+  const [events, setEvents] = useState([]);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
-    this.state = {
-      events: [],
-      selectedEvent: null,
-      start: null,
-      end: null,
-      date: null
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [start, setStart] = useState(null);
+  const [end, setEnd] = useState(null);
+  const [date, setDate] = useState(null);
+
+  // Load up events from db
+  useEffect(() => {
+    async function fetch() {
+      const db = new DbClient();
+
+      try {
+        const { body } = await db.post(API_PATH_SESSION);
+        setEvents(
+          body.map(
+            ({ ses_id, date, start_time, end_time, name, building }) => ({
+              id: ses_id,
+              start: moment(date + " " + start_time),
+              end: moment(date + " " + end_time),
+              value: name,
+              name,
+              building: building
+            })
+          )
+        );
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+    fetch();
+  }, []);
+
+  // Select event
+  function selectEvent(id) {
+    const event = events.find(ev => ev.id == id);
+    if (event) {
+      setSelectedEvent(event);
+      setDate(event.start.format("YYYY-MM-DD"));
+      setEnd(event.end.format("H:mm:ss"));
+      setStart(event.start.format("H:mm:ss"));
     }
   }
 
-  // Load up events from db
-  componentDidMount() {
-    axios({
-      method: 'post',
-      url: `${API_PATH}`,
-      headers: { 'content-type': 'application/json' }
-    })
-      .then(result => {
-        const events = result.data.body.map(
-          key => ({
-            id: key.ses_id,
-            start: moment(key.date + ' ' + key.start_time),
-            end: moment(key.date + ' ' + key.end_time),
-            value: key.name,
-            name: key.name,
-            building: key.building
-          })
-        )
-        this.setState({ events })
-      })
-      .catch(error => this.setState({ error: error.message }))
-  }
+  // Modify event
+  function handleFormSubmit(e) {
+    e.preventDefault();
 
-  handleFormSubmit = e => {
-    e.preventDefault()
-    axios({
-      method: 'post',
-      url: `${API_PATH_UPDATE}`,
-      headers: { 'content-type': 'application/json' },
-      data: {
-        id: this.state.selectedEvent.id,
-        start: this.state.start,
-        end: this.state.end,
-        date: this.state.date
+    async function fetch() {
+      const db = new DbClient();
+
+      try {
+        const { message } = await db.post(API_PATH_SESSION_UPDATE, {
+          id: selectedEvent.id,
+          start,
+          end,
+          date
+        });
+        setMessage(message);
+      } catch (error) {
+        setError(error.message);
       }
-    })
-      .then(result => {
-        this.setState({
-          message: result.data.message
-        })
-      })
-      .catch(error => {
-        this.setState({
-          error: error.message
-        })
-      })
+    }
+    fetch();
   }
 
+  return (
+    <div id="schedule">
+      <h2 className="page-title">Schedule</h2>
+      <h2 className="page-title-bottom">Modify event</h2>
 
-  render() {
-    return (
-      <div id="schedule">
-        <h2 className="page-title">Schedule</h2>
-        <h2 className="page-title-bottom">Modify event</h2>
+      <form action="#">
+        <label>Select event</label>
 
-        <form action="#" >
-          <label>Select event</label>
+        <select
+          id="room"
+          name="room"
+          defaultValue=""
+          onChange={e => selectEvent(e.target.value)}
+        >
+          <option value="" disabled hidden>
+            {" - Select event to modify - "}
+          </option>
+          {events.map(({ id, name }) => {
+            return (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            );
+          })}
+        </select>
 
-          <select
-            id="room"
-            name="room"
-            onChange={
-              e => this.setState(
-                {
-                  selectedEvent: this.selectEvent(e.target.value),
-                  date: this.selectEvent(e.target.value).start.format('YYYY-MM-DD'),
-                  end: this.selectEvent(e.target.value).end.format('H:mm:ss'),
-                  start: this.selectEvent(e.target.value).start.format('H:mm:ss')
-                }
-              )
-            }
-          >
-            <option value="" selected disabled hidden> - Select event to modify - </option>
-            {
-              this.state.events.map(sess => {
-                return <option key={sess.id} value={sess.id}>{sess.name}</option>
-              })
-            }
-          </select>
+        {selectedEvent && (
+          <div>
+            <label>Start time</label>
+            <input
+              type="time"
+              name="start_time"
+              value={start}
+              onChange={e => setStart(e.target.value)}
+            />
 
-          {
-            this.state.selectedEvent &&
-            <div>
-              <label>Start time</label>
-              <input
-                type="time"
-                name="start_time"
-                value={this.state.start}
-                onChange={
-                  e => this.setState(
-                    {
-                      start: e.target.value
-                    }
-                  )
-                }
-              />
+            <label>End time</label>
+            <input
+              type="time"
+              name="end_time"
+              value={end}
+              onChange={e => setEnd(e.target.value)}
+            />
 
-              <label>End time</label>
-              <input
-                type="time"
-                name="end_time"
-                value={this.state.end}
-                onChange={
-                  e => this.setState(
-                    {
-                      end: e.target.value
-                    }
-                  )
-                }
-              />
+            <label>Date</label>
+            <input
+              type="date"
+              name="date"
+              value={date}
+              onChange={e => setDate(e.target.value)}
+            />
 
-              <label>Date</label>
-              <input
-                type="date"
-                name="date"
-                value={this.state.date}
-                onChange={
-                  e => this.setState(
-                    {
-                      date: e.target.value
-                    }
-                  )
-                }
-              />
+            <br />
 
-              <br/>
+            <input
+              type="submit"
+              onClick={e => handleFormSubmit(e)}
+              value="Submit"
+            />
 
-              <input type="submit" onClick={e => this.handleFormSubmit(e)} value="Submit" />
-              <Link to="/schedule"><button>Back</button></Link>
-            </div>
-          }
-        </form>
-        {
-          this.state.message &&
-          <p>{this.state.message}</p>
-        }
-        {
-          this.state.error &&
-          <p>There was an error: {this.state.error}</p>
-        }
-      </div>
-    )
-  }
-
-  // Select event
-  selectEvent(id) {
-    return this.state.events.find(
-      function (ev) {
-        return ev.id == id
-      }
-    )
-  }
+            <Link to="/schedule">
+              <button>Back</button>
+            </Link>
+          </div>
+        )}
+      </form>
+      {message && <p>{message}</p>}
+      {error && <p>There was an error: {error}</p>}
+    </div>
+  );
 }

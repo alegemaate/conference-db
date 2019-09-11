@@ -1,1 +1,1 @@
-export const API_ROOT = 'https://conference.adsgames.net/api/'
+export const API_ROOT = "http://localhost";

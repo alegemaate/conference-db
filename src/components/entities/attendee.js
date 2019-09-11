@@ -1,30 +1,12 @@
-import React, { Component } from 'react'
-
 // Stores attendees
-export default class Attendee extends Component {
+export default class Attendee {
   // Ctor
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      id: props.att_id,
-      room_id: props.room_id,
-      name: props.name,
-      email: props.email,
-      type_name: props.type_name,
-      fee: props.fee
-    }
-  }
-
-  // Render sponsor
-  renderAttendee() {
-    return (
-      <div
-        key={this.state.id}
-        className={'attendee ' + this.state.name}
-      >
-        {this.state.name}
-      </div>
-    )
+  constructor({ att_id, room_id, name, email, type_name, fee }) {
+    this.id = att_id;
+    this.room_id = room_id;
+    this.name = name;
+    this.email = email;
+    this.type_name = type_name;
+    this.fee = fee;
   }
 }

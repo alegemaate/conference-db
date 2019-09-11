@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
 // Stores sponsors
 export default class Sponsor extends Component {
   // Ctor
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       name: props.name,
@@ -15,7 +15,7 @@ export default class Sponsor extends Component {
       tier_name: props.tier_name,
       fund_level: props.fund_level,
       jobs: []
-    }
+    };
   }
 
   // Render sponsor
@@ -23,34 +23,31 @@ export default class Sponsor extends Component {
     return (
       <div
         key={this.state.id}
-        className={'sponsor ' + this.state.tier_name.toLowerCase()}
+        className={"sponsor " + this.state.tier_name.toLowerCase()}
       >
         {this.state.name}
       </div>
-    )
+    );
   }
 
   // Render sponsor select
   renderSelect() {
     return (
-      <option
-        key={this.state.id}
-        value={this.state.id}
-      >
+      <option key={this.state.id} value={this.state.id}>
         {this.state.name}
       </option>
-    )
+    );
   }
 
   // Render sponsor jobs
   renderJobs() {
     if (this.state.jobs.length !== 0) {
-      return (
-        this.state.jobs.map(
-          job => job.renderJob()
-        )
-      )
+      return this.state.jobs.map(job => job.renderJob());
     }
-    return (<div className="job"><p>No jobs posted</p></div>)
+    return (
+      <div className="job">
+        <p>No jobs posted</p>
+      </div>
+    );
   }
 }

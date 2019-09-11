@@ -1,90 +1,75 @@
-import { API_ROOT } from './../api-config'
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from "react";
 
-import Attendee from '../entities/attendee.js'
-import Sponsor from '../entities/sponsor.js'
+import Attendee from "../entities/attendee";
+import Sponsor from "../entities/sponsor";
 
-const API_PATH_ATTENDEE = API_ROOT + '/attendee/read.php'
-const API_PATH_SPONSOR = API_ROOT + '/sponsor/read.php'
+import DbClient from "../DbClient";
+import { API_PATH_ATTENDEE, API_PATH_SPONSOR } from "../../constants/endpoints";
 
-export default class AccountingView extends Component {
-  // Ctor
-  constructor(props) {
-    super(props)
-    this.state = {
-      attendees: null,
-      sponsors: null
-    }
-  }
+export default function AccountingView() {
+  // State
+  const [attendees, setAttendees] = useState([]);
+  const [sponsors, setSponsors] = useState([]);
+  const [error, setError] = useState("");
 
   // Load up sponsors from db
-  componentDidMount() {
-    axios({
-      method: 'post',
-      url: `${API_PATH_ATTENDEE}`,
-      headers: { 'content-type': 'application/json' }
-    })
-      .then(result => {
-        const attendees = result.data.body.map(
-          att => new Attendee(att)
-        )
-        this.setState({ attendees })
-      })
-      .catch(error => this.setState({ error: error.message }))
+  useEffect(() => {
+    async function fetch() {
+      const db = new DbClient();
 
-    axios({
-      method: 'post',
-      url: `${API_PATH_SPONSOR}`,
-      headers: { 'content-type': 'application/json' }
-    })
-      .then(result => {
-        const sponsors = Object.keys(result.data.body).map(
-          key => new Sponsor(result.data.body[key])
-        )
-        this.setState({ sponsors })
-      })
-      .catch(error => this.setState({ error: error.message }))
-  }
+      try {
+        // Attendees
+        const { body: attendees } = await db.post(API_PATH_ATTENDEE);
+        setAttendees(attendees.map(att => new Attendee(att)));
 
-  render() {
-    return (
-      <div id="accounting">
-        <h2 className="page-title">Accounting</h2>
-        <h2 className="page-title-bottom">How much are we making?</h2>
-        {
-          // If the sponsors have been loaded, display them
-          this.state.attendees &&
-          this.state.sponsors &&
-          this.fund_calculator(this.state.sponsors, this.state.attendees)
-        }
-      </div>
-    )
-  }
+        // Sponsors
+        const { body: sponsors } = await db.post(API_PATH_SPONSOR);
+        setSponsors(
+          Object.keys(sponsors).map(key => new Sponsor(sponsors[key]))
+        );
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+    fetch();
+  }, []);
 
-  fund_calculator(sponsors, attendees) {
-    let sponsor_funds = 0
-    let attendee_funds = 0
+  function calculateFunds(sponsors, attendees) {
+    const attendeeFunds = attendees.reduce(
+      (acc, { fee }) => acc + parseInt(fee, 10),
+      0
+    );
 
-    attendees.map(att => (
-      attendee_funds = attendee_funds + parseInt(att.state.fee, 10)
-    ))
-
-    sponsors.map(spn => (
-      sponsor_funds = sponsor_funds + parseInt(spn.state.fund_level, 10)
-    ))
+    const sponsorFunds = sponsors.reduce(
+      (acc, spn) => acc + parseInt(spn.state.fund_level, 10),
+      0
+    );
 
     return (
       <div>
         <h2>Sponsor Funds</h2>
-        <p>${sponsor_funds}</p>
+        <p>${sponsorFunds}</p>
 
         <h2>Attendee Funds</h2>
-        <p>${attendee_funds}</p>
+        <p>${attendeeFunds}</p>
 
         <h2>Total</h2>
-        <p>${attendee_funds + sponsor_funds}</p>
+        <p>${attendeeFunds + sponsorFunds}</p>
       </div>
-    )
+    );
   }
+
+  return (
+    <div id="accounting">
+      <h2 className="page-title">Accounting</h2>
+      <h2 className="page-title-bottom">How much are we making?</h2>
+      {// If the sponsors have been loaded, display them
+      calculateFunds(sponsors, attendees)}
+      <div>
+        {error && (
+          <div className="error">Sorry, an error occured. ({error})</div>
+        )}
+      </div>
+    </div>
+  );
 }

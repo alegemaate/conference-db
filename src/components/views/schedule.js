@@ -1,70 +1,69 @@
-import { API_ROOT } from './../api-config'
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
-import moment from 'moment'
-import WeekCalendar from 'react-week-calendar'
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
+import WeekCalendar from "react-week-calendar";
 
-require('./../../stylesheets/calendar.css')
+import "../../stylesheets/calendar.css";
 
-const API_PATH = API_ROOT + '/session/read.php'
+import DbClient from "../DbClient";
+import { API_PATH_SESSION } from "../../constants/endpoints";
 
 // Scheduling
-export default class ScheduleView extends Component {
-  constructor(props) {
-    super(props)
+export default function ScheduleView() {
+  // State
+  const [selectedIntervals, setSelectedIntervals] = useState([]);
+  const [error, setError] = useState("");
 
-    this.state = {
-      firstDay: moment('2019-01-01'),
-      cellHeight: 50,
-      useModal: false,
-      startTime: moment({ h: 8, m: 0 }),
-      endTime: moment({ h: 22, m: 59 }),
-      scaleFormat: 'hh:mm A',
-      eventSpacing: 15,
-      numberOfDays: 3,
-      scaleUnit: 30,
-      dayFormat: 'DD/MM',
-      selectedIntervals: []
+  // Config for calendar
+  const calenderConfig = {
+    firstDay: moment("2019-01-01"),
+    cellHeight: 50,
+    useModal: false,
+    startTime: moment({ h: 8, m: 0 }),
+    endTime: moment({ h: 22, m: 59 }),
+    scaleFormat: "hh:mm A",
+    eventSpacing: 15,
+    numberOfDays: 3,
+    scaleUnit: 30,
+    dayFormat: "DD/MM"
+  };
+
+  // Load up schedule
+  useEffect(() => {
+    async function fetch() {
+      const db = new DbClient();
+
+      try {
+        const { body } = await db.post(API_PATH_SESSION);
+        setSelectedIntervals(
+          body.map(({ ses_id, date, start_time, end_time, name }) => ({
+            uid: ses_id,
+            start: moment(date + " " + start_time),
+            end: moment(date + " " + end_time),
+            value: name
+          }))
+        );
+      } catch (error) {
+        setError(error.message);
+      }
     }
-  }
+    fetch();
+  }, []);
 
-  // Load up events from db
-  componentDidMount() {
-    axios({
-      method: 'post',
-      url: `${API_PATH}`,
-      headers: { 'content-type': 'application/json' }
-    })
-      .then(result => {
-        const selectedIntervals = result.data.body.map(
-          key => ({
-            uid: key.id,
-            start: moment(key.date + ' ' + key.start_time),
-            end: moment(key.date + ' ' + key.end_time),
-            value: key.name
-          })
-        )
-        console.log(selectedIntervals)
-        this.setState({ selectedIntervals })
-      })
-      .catch(error => this.setState({ error: error.message }))
-  }
-
-
-  render() {
-    let { ...config } = this.state
-
-    return (
-      <div id="schedule">
-        <h2 className="page-title">Schedule</h2>
-        <h2 className="page-title-bottom">What is going on?</h2>
-        <WeekCalendar
-          { ...config }
-        />
-        <br/>
-        <Link to="/schedule-change"><button>Modify schedule</button></Link>
+  return (
+    <div id="schedule">
+      <h2 className="page-title">Schedule</h2>
+      <h2 className="page-title-bottom">What is going on?</h2>
+      <WeekCalendar {...calenderConfig} selectedIntervals={selectedIntervals} />
+      <br />
+      <Link to="/schedule-change">
+        <button>Modify schedule</button>
+      </Link>
+      <div>
+        {error && (
+          <div className="error">Sorry, an error occured. ({error})</div>
+        )}
       </div>
-    )
-  }
+    </div>
+  );
 }
