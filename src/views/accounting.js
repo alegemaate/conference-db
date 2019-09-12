@@ -41,7 +41,7 @@ export default function AccountingView() {
     );
 
     const sponsorFunds = sponsors.reduce(
-      (acc, spn) => acc + parseInt(spn.state.fund_level, 10),
+      (acc, spn) => acc + parseInt(spn.fund_level, 10),
       0
     );
 

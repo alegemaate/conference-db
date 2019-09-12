@@ -1,6 +1,5 @@
 // Stores sponsors
 export default class Sponsor {
-  // Ctor
   constructor({
     name,
     spn_id,

@@ -1,76 +1,73 @@
 header {
-	clear: both;
-	display: block;
+  clear: both;
+  display: block;
 
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	height: 200px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
 
-  /*background-image: url(./../images/header.jpg);*/
+  background-image: url(./../images/header.jpg);
   background-color: #a5a6a9;
   background-size: 100%;
-  background-position: bottom; 
+  background-position: bottom;
 }
 
 .triangle {
-	width: 0;
-	height: 0;
-	border-style: solid;
-	border-width: 0 0 200px 200px;
-	border-color: transparent transparent #f45844 transparent;
-	position: absolute;
-	right: 0;
-	top: 0;
-	z-index: 1;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 200px 200px;
+  border-color: transparent transparent #f45844 transparent;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
 }
 
 .title-1 {
-	color: #FFF;
-	margin: 10px 0 0 22px;
-	font-size: 60px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 10px 0 0 22px;
+  font-size: 60px;
 }
 
 .title-2 {
-	color: #000;
-	margin: -14px 0 0 22px;
-	font-size: 44px;
+  color: #fff;
+  margin: -14px 0 0 22px;
+  font-size: 44px;
 }
 
 nav {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	height: 60px;
-	font-size: 18px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  font-size: 18px;
 }
 
 nav ul {
-	list-style: none;
-	padding: 0 20px;
-	margin:0;
-	height: 100%;
-	background-color: #f45844;
+  list-style: none;
+  padding: 0 20px;
+  margin: 0;
+  height: 100%;
+  background-color: #f45844;
 }
 
 nav li {
-	float: left;
-	text-decoration: none;
-	height: 100%;
+  float: left;
+  text-decoration: none;
+  height: 100%;
 }
 
 nav li a {
-	color: #000;
-	text-decoration: none;
-	padding:  19px 10px;
-	display: block;
+  color: #000;
+  text-decoration: none;
+  padding: 19px 10px;
+  display: block;
 }
 
 nav li a:hover {
-	background-color: #cf4735;
+  background-color: #cf4735;
 }
-
-
-

@@ -1,5 +1,7 @@
-import { API_ROOT } from "./api-config";
 import axios from "axios";
+
+// Root of api
+const API_ROOT = "http://localhost";
 
 // Custom error
 class DbError extends Error {}

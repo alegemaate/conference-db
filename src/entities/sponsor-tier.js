@@ -1,6 +1,5 @@
 // Stores sponsor tiers
 export default class SponsorTier {
-  // Ctor
   constructor({ tier_id, name, fund_level, emails_allowed }) {
     this.id = tier_id;
     this.name = name;
