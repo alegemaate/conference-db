@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import Room from "../entities/room.js";
 
-import DbClient from "../DbClient";
-import { API_PATH_ROOM } from "../../constants/endpoints";
+import DbClient from "../components/DbClient";
+import { API_PATH_ROOM } from "../constants/endpoints";
 
 export default function RoomView() {
   // State
@@ -28,7 +28,7 @@ export default function RoomView() {
 
   // Select room
   function selectRoom(id) {
-    return rooms.find(rm => rm.state.id == id);
+    return rooms.find(rm => rm.id === parseInt(id));
   }
 
   // Render page
@@ -50,7 +50,13 @@ export default function RoomView() {
               {" - Select a room - "}
             </option>
             {// If the committee names have been received display them
-            rooms.map(rm => rm.renderSelect())}
+            rooms
+              .filter(rm => rm.capacity > 0)
+              .map(({ id, building, number }) => (
+                <option key={id} value={id}>
+                  {building} - {number}
+                </option>
+              ))}
           </select>
           <div>
             {error && (
@@ -64,7 +70,19 @@ export default function RoomView() {
         <div>
           <h2>Occupants</h2>
           <div className="result">
-            <ul>{selectedRoom.renderOccupants()}</ul>
+            <ul>
+              <div>
+                <li>
+                  Capacity at {selectedRoom.occupants.length} /{" "}
+                  {selectedRoom.capacity}
+                </li>
+                {selectedRoom.occupants.map(({ name }) => (
+                  <li key={name} className="member">
+                    {name}
+                  </li>
+                ))}
+              </div>
+            </ul>
           </div>
         </div>
       )}

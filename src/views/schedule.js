@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import WeekCalendar from "react-week-calendar";
 
-import "../../stylesheets/calendar.css";
+import "../stylesheets/calendar.css";
 
-import DbClient from "../DbClient";
-import { API_PATH_SESSION } from "../../constants/endpoints";
+import DbClient from "../components/DbClient";
+import { API_PATH_SESSION } from "../constants/endpoints";
 
 // Scheduling
 export default function ScheduleView() {

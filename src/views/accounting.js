@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import Attendee from "../entities/attendee";
 import Sponsor from "../entities/sponsor";
 
-import DbClient from "../DbClient";
-import { API_PATH_ATTENDEE, API_PATH_SPONSOR } from "../../constants/endpoints";
+import DbClient from "../components/DbClient";
+import { API_PATH_ATTENDEE, API_PATH_SPONSOR } from "../constants/endpoints";
 
 export default function AccountingView() {
   // State

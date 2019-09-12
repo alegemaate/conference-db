@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 
 import Committee from "../entities/committee.js";
 
-import DbClient from "../DbClient";
-import { API_PATH_COMMITTEE } from "../../constants/endpoints";
+import DbClient from "../components/DbClient";
+import { API_PATH_COMMITTEE } from "../constants/endpoints";
+
+import Icon from "react-icons-kit";
+import { ic_stars } from "react-icons-kit/md/ic_stars";
 
 export default function CommitteeView() {
   // State
@@ -28,7 +31,7 @@ export default function CommitteeView() {
 
   // Select a given committee
   function selectCommittee(id) {
-    return committees.find(com => com.state.id == id);
+    return committees.find(com => com.id === parseInt(id));
   }
 
   // Render page
@@ -53,9 +56,9 @@ export default function CommitteeView() {
               {" - Select a committee - "}
             </option>
             {// Render committees list
-            committees.map(com => (
-              <option key={com.state.id} value={com.state.id}>
-                {com.state.name}
+            committees.map(({ id, name }) => (
+              <option key={id} value={id}>
+                {name}
               </option>
             ))}
           </select>
@@ -69,9 +72,32 @@ export default function CommitteeView() {
       {// If the committee names have been received display them
       selectedCommittee && (
         <div>
-          <h2>{selectedCommittee.state.name}</h2>
+          <h2>{selectedCommittee.name}</h2>
           <div className="result">
-            <ul>{selectedCommittee.renderMembers()}</ul>
+            <ul>
+              {selectedCommittee.members.map(member => {
+                // They are the chair, how special
+                if (selectedCommittee.chair_id === member.mem_id) {
+                  return (
+                    <li
+                      title="chair"
+                      key={member.mem_id}
+                      className="member chair"
+                    >
+                      <Icon icon={ic_stars} />
+                      {member.mem_name}
+                    </li>
+                  );
+                }
+
+                // Just a regular member
+                return (
+                  <li key={member.mem_id} className="member">
+                    {member.mem_name}
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       )}

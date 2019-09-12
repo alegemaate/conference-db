@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import WeekCalendar from "react-week-calendar";
 
-import "../../stylesheets/calendar.css";
+import "../stylesheets/calendar.css";
 
-import DbClient from "../DbClient";
+import DbClient from "../components/DbClient";
 import {
   API_PATH_SESSION,
   API_PATH_SESSION_UPDATE
-} from "../../constants/endpoints";
+} from "../constants/endpoints";
 
 // Scheduling
 export default function ScheduleModifyView() {
@@ -51,7 +50,7 @@ export default function ScheduleModifyView() {
 
   // Select event
   function selectEvent(id) {
-    const event = events.find(ev => ev.id == id);
+    const event = events.find(ev => ev.id === parseInt(id));
     if (event) {
       setSelectedEvent(event);
       setDate(event.start.format("YYYY-MM-DD"));

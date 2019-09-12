@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 import Sponsor from "../entities/sponsor.js";
 
-import DbClient from "../DbClient";
-import { API_PATH_SPONSOR } from "../../constants/endpoints";
+import DbClient from "../components/DbClient";
+import { API_PATH_SPONSOR } from "../constants/endpoints";
 
-require("./../../stylesheets/sponsors.css");
+import "../stylesheets/sponsors.css";
 
 // Sponsor view
 export default function SponsorView() {
@@ -36,7 +36,11 @@ export default function SponsorView() {
       <h2 className="page-title-bottom">Who is paying for this?</h2>
       <div className="sponsors">
         {// Display sponsors
-        sponsors.map(spn => spn.renderSponsor())}
+        sponsors.map(({ id, name, tier_name }) => (
+          <div key={id} className={"sponsor " + tier_name.toLowerCase()}>
+            {name}
+          </div>
+        ))}
       </div>
       <br />
       <Link to="/sponsor-add">

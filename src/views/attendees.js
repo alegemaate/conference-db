@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 import Attendee from "../entities/attendee.js";
 
-import DbClient from "../DbClient";
-import { API_PATH_ATTENDEE } from "../../constants/endpoints";
+import DbClient from "../components/DbClient";
+import { API_PATH_ATTENDEE } from "../constants/endpoints";
 
 export default function AttendeeView() {
   // State
