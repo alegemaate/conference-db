@@ -1,28 +1,26 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
+import { routes } from "../constants/routes";
 
-require('./../stylesheets/nav.css')
+import "../stylesheets/nav.css";
 
-export default class App extends Component {
-  render() {
-    return (
-      <header>
-        <h1 className="title-1">Conference</h1>
-        <h1 className="title-2">Database</h1>
-        <div className="triangle"/>
-        <nav>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/committee">Committee</Link></li>
-            <li><Link to="/rooms">Rooms</Link></li>
-            <li><Link to="/schedule">Schedule</Link></li>
-            <li><Link to="/sponsors">Sponsors</Link></li>
-            <li><Link to="/jobs">Jobs</Link></li>
-            <li><Link to="/attendees">Attendees</Link></li>
-            <li><Link to="/accounting">Accounting</Link></li>
-          </ul>
-        </nav>
-      </header>
-    )
-  }
+export default function Header() {
+  return (
+    <header>
+      <h1 className="title-1">Conference</h1>
+      <h1 className="title-2">Database</h1>
+      <div className="triangle" />
+      <nav>
+        <ul>
+          {routes
+            .filter(({ inNav }) => inNav)
+            .map(({ path, name, inNav }) => (
+              <li key={path}>
+                <Link to={path}>{name}</Link>
+              </li>
+            ))}
+        </ul>
+      </nav>
+    </header>
+  );
 }
