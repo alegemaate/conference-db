@@ -11,4 +11,3 @@ export const API_PATH_ROOM = "/room/read.php";
 export const API_PATH_SESSION = "/session/read.php";
 export const API_PATH_SESSION_UPDATE = "/session/update.php";
 export const API_PATH_JOB = "/job/read.php";
-

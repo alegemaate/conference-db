@@ -6,7 +6,7 @@ import Sponsor from "../entities/sponsor.js";
 import DbClient from "../components/DbClient";
 import {
   API_PATH_SPONSOR,
-  API_PATH_SPONSOR_DELETE
+  API_PATH_SPONSOR_DELETE,
 } from "../constants/endpoints";
 
 export default function SponsorRemoveView() {
@@ -22,7 +22,7 @@ export default function SponsorRemoveView() {
 
     try {
       const { body } = await db.post(API_PATH_SPONSOR);
-      setSponsors(Object.keys(body).map(key => new Sponsor(body[key])));
+      setSponsors(Object.keys(body).map((key) => new Sponsor(body[key])));
     } catch (error) {
       setError(error.message);
     }
@@ -39,7 +39,7 @@ export default function SponsorRemoveView() {
     const db = new DbClient();
     try {
       const { message } = await db.post(API_PATH_SPONSOR_DELETE, {
-        spn_id: sponsorId
+        spn_id: sponsorId,
       });
       setMessage(message);
       await readSponsors();
@@ -58,21 +58,23 @@ export default function SponsorRemoveView() {
         <select
           type="text"
           defaultValue=""
-          onChange={e => setSponsorId(parseInt(e.target.value, 10))}
+          onChange={(e) => setSponsorId(parseInt(e.target.value, 10))}
         >
           <option value="" disabled hidden>
             {" - Select a sponsor - "}
           </option>
-          {// Display sponsors
-          sponsors.map(({ id, name }) => (
-            <option key={id} value={id}>
-              {name}
-            </option>
-          ))}
+          {
+            // Display sponsors
+            sponsors.map(({ id, name }) => (
+              <option key={id} value={id}>
+                {name}
+              </option>
+            ))
+          }
         </select>
         <input
           type="submit"
-          onClick={e => handleFormSubmit(e)}
+          onClick={(e) => handleFormSubmit(e)}
           value="Submit"
         />
         <Link to="/sponsors">

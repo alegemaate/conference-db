@@ -18,7 +18,7 @@ export default function AttendeeView() {
 
       try {
         const { body } = await db.post(API_PATH_ATTENDEE);
-        setAttendees(body.map(att => new Attendee(att)));
+        setAttendees(body.map((att) => new Attendee(att)));
       } catch (error) {
         setError(error.message);
       }

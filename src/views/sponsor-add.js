@@ -6,7 +6,7 @@ import SponsorTier from "../entities/sponsor-tier.js";
 import DbClient from "../components/DbClient";
 import {
   API_PATH_SPONSOR_CREATE,
-  API_PATH_SPONSOR_TIER
+  API_PATH_SPONSOR_TIER,
 } from "../constants/endpoints";
 
 export default function SponsorAddView() {
@@ -24,7 +24,7 @@ export default function SponsorAddView() {
 
       try {
         const { body } = await db.post(API_PATH_SPONSOR_TIER);
-        setTiers(body.map(tier => new SponsorTier(tier)));
+        setTiers(body.map((tier) => new SponsorTier(tier)));
       } catch (error) {
         setError(error.message);
       }
@@ -40,7 +40,7 @@ export default function SponsorAddView() {
     try {
       const { message } = await db.post(API_PATH_SPONSOR_CREATE, {
         tier_id: tierId,
-        name
+        name,
       });
       setMessage(message);
     } catch (error) {
@@ -58,14 +58,14 @@ export default function SponsorAddView() {
           type="text"
           placeholder="Company name.."
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
         />
 
         <label>Tier</label>
         <select
           type="text"
           defaultValue=""
-          onChange={e => setTierId(parseInt(e.target.value, 10))}
+          onChange={(e) => setTierId(parseInt(e.target.value, 10))}
         >
           <option value="" disabled hidden>
             {" - Select a tier - "}
@@ -79,7 +79,7 @@ export default function SponsorAddView() {
 
         <input
           type="submit"
-          onClick={e => handleFormSubmit(e)}
+          onClick={(e) => handleFormSubmit(e)}
           value="Submit"
         />
         <Link to="/sponsors">

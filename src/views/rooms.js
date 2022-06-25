@@ -18,7 +18,7 @@ export default function RoomView() {
 
       try {
         const { body } = await db.post(API_PATH_ROOM);
-        setRooms(Object.keys(body).map(key => new Room(body[key])));
+        setRooms(Object.keys(body).map((key) => new Room(body[key])));
       } catch (error) {
         setError(error.message);
       }
@@ -28,7 +28,7 @@ export default function RoomView() {
 
   // Select room
   function selectRoom(id) {
-    return rooms.find(rm => rm.id === parseInt(id));
+    return rooms.find((rm) => rm.id === parseInt(id));
   }
 
   // Render page
@@ -44,19 +44,21 @@ export default function RoomView() {
             id="room"
             name="room"
             defaultValue=""
-            onChange={e => setSelectedRoom(selectRoom(e.target.value))}
+            onChange={(e) => setSelectedRoom(selectRoom(e.target.value))}
           >
             <option value="" disabled hidden>
               {" - Select a room - "}
             </option>
-            {// If the committee names have been received display them
-            rooms
-              .filter(rm => rm.capacity > 0)
-              .map(({ id, building, number }) => (
-                <option key={id} value={id}>
-                  {building} - {number}
-                </option>
-              ))}
+            {
+              // If the committee names have been received display them
+              rooms
+                .filter((rm) => rm.capacity > 0)
+                .map(({ id, building, number }) => (
+                  <option key={id} value={id}>
+                    {building} - {number}
+                  </option>
+                ))
+            }
           </select>
           <div>
             {error && (
@@ -65,27 +67,29 @@ export default function RoomView() {
           </div>
         </form>
       </div>
-      {// Have we received a list of members?
-      selectedRoom && (
-        <div>
-          <h2>Occupants</h2>
-          <div className="result">
-            <ul>
-              <div>
-                <li>
-                  Capacity at {selectedRoom.occupants.length} /{" "}
-                  {selectedRoom.capacity}
-                </li>
-                {selectedRoom.occupants.map(({ name }) => (
-                  <li key={name} className="member">
-                    {name}
+      {
+        // Have we received a list of members?
+        selectedRoom && (
+          <div>
+            <h2>Occupants</h2>
+            <div className="result">
+              <ul>
+                <div>
+                  <li>
+                    Capacity at {selectedRoom.occupants.length} /{" "}
+                    {selectedRoom.capacity}
                   </li>
-                ))}
-              </div>
-            </ul>
+                  {selectedRoom.occupants.map(({ name }) => (
+                    <li key={name} className="member">
+                      {name}
+                    </li>
+                  ))}
+                </div>
+              </ul>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
     </div>
   );
 }
