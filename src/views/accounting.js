@@ -20,12 +20,12 @@ export default function AccountingView() {
       try {
         // Attendees
         const { body: attendees } = await db.post(API_PATH_ATTENDEE);
-        setAttendees(attendees.map(att => new Attendee(att)));
+        setAttendees(attendees.map((att) => new Attendee(att)));
 
         // Sponsors
         const { body: sponsors } = await db.post(API_PATH_SPONSOR);
         setSponsors(
-          Object.keys(sponsors).map(key => new Sponsor(sponsors[key]))
+          Object.keys(sponsors).map((key) => new Sponsor(sponsors[key]))
         );
       } catch (error) {
         setError(error.message);
@@ -63,8 +63,10 @@ export default function AccountingView() {
     <div id="accounting">
       <h2 className="page-title">Accounting</h2>
       <h2 className="page-title-bottom">How much are we making?</h2>
-      {// If the sponsors have been loaded, display them
-      calculateFunds(sponsors, attendees)}
+      {
+        // If the sponsors have been loaded, display them
+        calculateFunds(sponsors, attendees)
+      }
       <div>
         {error && (
           <div className="error">Sorry, an error occured. ({error})</div>

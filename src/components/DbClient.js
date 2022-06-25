@@ -14,7 +14,7 @@ export default class DbClient {
         method: "post",
         url: `${API_ROOT}${url}`,
         headers: { "content-type": "application/json" },
-        data: params
+        data: params,
       });
       return data;
     } catch (e) {

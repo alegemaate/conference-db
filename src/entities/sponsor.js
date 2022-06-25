@@ -7,7 +7,7 @@ export default class Sponsor {
     emails_sent,
     emails_allowed,
     tier_name,
-    fund_level
+    fund_level,
   }) {
     this.name = name;
     this.id = spn_id;

@@ -25,7 +25,7 @@ export default function ScheduleView() {
     eventSpacing: 15,
     numberOfDays: 3,
     scaleUnit: 30,
-    dayFormat: "DD/MM"
+    dayFormat: "DD/MM",
   };
 
   // Load up schedule
@@ -40,7 +40,7 @@ export default function ScheduleView() {
             uid: ses_id,
             start: moment(date + " " + start_time),
             end: moment(date + " " + end_time),
-            value: name
+            value: name,
           }))
         );
       } catch (error) {

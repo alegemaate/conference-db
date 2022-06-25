@@ -8,7 +8,7 @@ import DbClient from "../components/DbClient";
 import {
   API_PATH_ATTENDEE_CREATE,
   API_PATH_ATTENDEE_TYPE,
-  API_PATH_ROOM
+  API_PATH_ROOM,
 } from "../constants/endpoints";
 
 export default function AttendeeAddView() {
@@ -29,7 +29,7 @@ export default function AttendeeAddView() {
 
       try {
         const { body } = await db.post(API_PATH_ATTENDEE_TYPE);
-        setAttendeeTypes(body.map(type => new AttendeeType(type)));
+        setAttendeeTypes(body.map((type) => new AttendeeType(type)));
       } catch (error) {
         setError(error.message);
       }
@@ -45,7 +45,7 @@ export default function AttendeeAddView() {
         name,
         email,
         type_id: typeId,
-        room_id: roomId
+        room_id: roomId,
       });
       setMessage(message);
       await loadRooms();
@@ -69,7 +69,7 @@ export default function AttendeeAddView() {
 
     try {
       const { body } = await db.post(API_PATH_ROOM);
-      setRooms(Object.keys(body).map(key => new Room(body[key])));
+      setRooms(Object.keys(body).map((key) => new Room(body[key])));
     } catch (error) {
       setError(error.message);
     }
@@ -85,7 +85,7 @@ export default function AttendeeAddView() {
           type="text"
           placeholder="Attendee name.."
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
         />
 
         <label>Email</label>
@@ -93,13 +93,13 @@ export default function AttendeeAddView() {
           type="email"
           placeholder="Attendee email.."
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <label>Attendee Type</label>
         <select
           type="text"
-          onChange={e => {
+          onChange={(e) => {
             updateRoomSelector(e.target.value);
             setTypeId(parseInt(e.target.value, 10));
           }}
@@ -122,25 +122,27 @@ export default function AttendeeAddView() {
               id="room"
               name="room"
               defaultValue=""
-              onChange={e => setRoomId(parseInt(e.target.value, 10))}
+              onChange={(e) => setRoomId(parseInt(e.target.value, 10))}
             >
               <option value="" disabled hidden>
                 {"  - Select a room - "}
               </option>
               <option value="null">No room</option>
-              {// If the committee names have been received display them
-              rooms.map(({ id, building, number }) => (
-                <option key={id} value={id}>
-                  {building} - {number}
-                </option>
-              ))}
+              {
+                // If the committee names have been received display them
+                rooms.map(({ id, building, number }) => (
+                  <option key={id} value={id}>
+                    {building} - {number}
+                  </option>
+                ))
+              }
             </select>
           </div>
         )}
 
         <input
           type="submit"
-          onClick={e => handleFormSubmit(e)}
+          onClick={(e) => handleFormSubmit(e)}
           value="Submit"
         />
         <Link to="/attendees">

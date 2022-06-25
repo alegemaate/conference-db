@@ -21,7 +21,7 @@ export default function CommitteeView() {
 
       try {
         const { body } = await db.post(API_PATH_COMMITTEE);
-        setCommittees(Object.keys(body).map(key => new Committee(body[key])));
+        setCommittees(Object.keys(body).map((key) => new Committee(body[key])));
       } catch (error) {
         setError(error.message);
       }
@@ -31,7 +31,7 @@ export default function CommitteeView() {
 
   // Select a given committee
   function selectCommittee(id) {
-    return committees.find(com => com.id === parseInt(id));
+    return committees.find((com) => com.id === parseInt(id));
   }
 
   // Render page
@@ -48,19 +48,21 @@ export default function CommitteeView() {
             id="committee"
             name="committee"
             defaultValue=""
-            onChange={e =>
+            onChange={(e) =>
               setSelectedCommittee(selectCommittee(e.target.value))
             }
           >
             <option value="" disabled hidden>
               {" - Select a committee - "}
             </option>
-            {// Render committees list
-            committees.map(({ id, name }) => (
-              <option key={id} value={id}>
-                {name}
-              </option>
-            ))}
+            {
+              // Render committees list
+              committees.map(({ id, name }) => (
+                <option key={id} value={id}>
+                  {name}
+                </option>
+              ))
+            }
           </select>
           <div>
             {error && (
@@ -69,38 +71,40 @@ export default function CommitteeView() {
           </div>
         </form>
       </div>
-      {// If the committee names have been received display them
-      selectedCommittee && (
-        <div>
-          <h2>{selectedCommittee.name}</h2>
-          <div className="result">
-            <ul>
-              {selectedCommittee.members.map(member => {
-                // They are the chair, how special
-                if (selectedCommittee.chair_id === member.mem_id) {
+      {
+        // If the committee names have been received display them
+        selectedCommittee && (
+          <div>
+            <h2>{selectedCommittee.name}</h2>
+            <div className="result">
+              <ul>
+                {selectedCommittee.members.map((member) => {
+                  // They are the chair, how special
+                  if (selectedCommittee.chair_id === member.mem_id) {
+                    return (
+                      <li
+                        title="chair"
+                        key={member.mem_id}
+                        className="member chair"
+                      >
+                        <Icon icon={ic_stars} />
+                        {member.mem_name}
+                      </li>
+                    );
+                  }
+
+                  // Just a regular member
                   return (
-                    <li
-                      title="chair"
-                      key={member.mem_id}
-                      className="member chair"
-                    >
-                      <Icon icon={ic_stars} />
+                    <li key={member.mem_id} className="member">
                       {member.mem_name}
                     </li>
                   );
-                }
-
-                // Just a regular member
-                return (
-                  <li key={member.mem_id} className="member">
-                    {member.mem_name}
-                  </li>
-                );
-              })}
-            </ul>
+                })}
+              </ul>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
     </div>
   );
 }

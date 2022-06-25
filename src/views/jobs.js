@@ -20,10 +20,10 @@ export default function JobView() {
 
       try {
         const { body: sponsors } = await db.post(API_PATH_SPONSOR);
-        setSponsors(sponsors.map(sponsor => new Sponsor(sponsor)));
+        setSponsors(sponsors.map((sponsor) => new Sponsor(sponsor)));
 
         const { body: jobs } = await db.post(API_PATH_JOB);
-        setJobs(jobs.map(job => new Job(job)));
+        setJobs(jobs.map((job) => new Job(job)));
       } catch (error) {
         setError(error.message);
       }
@@ -38,34 +38,38 @@ export default function JobView() {
       <div>
         <h3>Jobs by sponsor</h3>
         <div className="sponsors">
-          {// Link jobs to sponsors
-          sponsors.forEach(sponsor => {
-            jobs.forEach(job => {
-              if (sponsor.id === job.spn_id) {
-                sponsor.jobs.push(job);
-              }
-            });
-          })}
-          {// Display sponsors jobs
-          sponsors.map(({ id, tier_name, name, jobs }) => (
-            <div key={id}>
-              <div key={id} className={"sponsor " + tier_name.toLowerCase()}>
-                {name}
-              </div>
-              {jobs.length > 0 ? (
-                jobs.map(({ job_id, province, title, pay_rate, city }) => (
-                  <div key={job_id} className={"job"}>
-                    {title} - {city},{province} ($
-                    {pay_rate})
-                  </div>
-                ))
-              ) : (
-                <div className="job">
-                  <p>No jobs posted</p>
+          {
+            // Link jobs to sponsors
+            sponsors.forEach((sponsor) => {
+              jobs.forEach((job) => {
+                if (sponsor.id === job.spn_id) {
+                  sponsor.jobs.push(job);
+                }
+              });
+            })
+          }
+          {
+            // Display sponsors jobs
+            sponsors.map(({ id, tier_name, name, jobs }) => (
+              <div key={id}>
+                <div key={id} className={"sponsor " + tier_name.toLowerCase()}>
+                  {name}
                 </div>
-              )}
-            </div>
-          ))}
+                {jobs.length > 0 ? (
+                  jobs.map(({ job_id, province, title, pay_rate, city }) => (
+                    <div key={job_id} className={"job"}>
+                      {title} - {city},{province} ($
+                      {pay_rate})
+                    </div>
+                  ))
+                ) : (
+                  <div className="job">
+                    <p>No jobs posted</p>
+                  </div>
+                )}
+              </div>
+            ))
+          }
         </div>
       </div>
 

@@ -21,7 +21,7 @@ export default function SponsorView() {
 
       try {
         const { body } = await db.post(API_PATH_SPONSOR);
-        setSponsors(Object.keys(body).map(key => new Sponsor(body[key])));
+        setSponsors(Object.keys(body).map((key) => new Sponsor(body[key])));
       } catch (error) {
         setError(error.message);
       }
@@ -35,12 +35,14 @@ export default function SponsorView() {
       <h2 className="page-title">Sponsors</h2>
       <h2 className="page-title-bottom">Who is paying for this?</h2>
       <div className="sponsors">
-        {// Display sponsors
-        sponsors.map(({ id, name, tier_name }) => (
-          <div key={id} className={"sponsor " + tier_name.toLowerCase()}>
-            {name}
-          </div>
-        ))}
+        {
+          // Display sponsors
+          sponsors.map(({ id, name, tier_name }) => (
+            <div key={id} className={"sponsor " + tier_name.toLowerCase()}>
+              {name}
+            </div>
+          ))
+        }
       </div>
       <br />
       <Link to="/sponsor-add">

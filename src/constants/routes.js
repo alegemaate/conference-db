@@ -14,89 +14,89 @@ import AccountingView from "../views/accounting";
 
 // Routes for nav
 export const routes = [
-  { path: "/", name: "Home", exact: true, inNav: false, component: HomeView },
+  { path: "/", name: "Home", exact: true, inNav: false, View: HomeView },
   {
     path: "/home",
     name: "Home",
     exact: false,
     inNav: true,
-    component: HomeView
+    View: HomeView,
   },
   {
     path: "/committee",
     name: "Committee",
     exact: false,
     inNav: true,
-    component: CommitteeView
+    View: CommitteeView,
   },
   {
     path: "/rooms",
     name: "Rooms",
     exact: false,
     inNav: true,
-    component: RoomView
+    View: RoomView,
   },
   {
     path: "/schedule",
     name: "Schedule",
     exact: false,
     inNav: true,
-    component: ScheduleView
+    View: ScheduleView,
   },
   {
     path: "/schedule-change",
     name: "Schedule Modify",
     exact: false,
     inNav: false,
-    component: ScheduleModifyView
+    View: ScheduleModifyView,
   },
   {
     path: "/sponsors",
     name: "Sponsors",
     exact: false,
     inNav: true,
-    component: SponsorView
+    View: SponsorView,
   },
   {
     path: "/sponsor-add",
     name: "Sponsors Add",
     exact: false,
     inNav: false,
-    component: SponsorAddView
+    View: SponsorAddView,
   },
   {
     path: "/sponsor-remove",
     name: "Sponsors Remove",
     exact: false,
     inNav: false,
-    component: SponsorRemoveView
+    View: SponsorRemoveView,
   },
   {
     path: "/jobs",
     name: "Jobs",
     exact: false,
     inNav: true,
-    component: JobView
+    View: JobView,
   },
   {
     path: "/attendees",
     name: "Attendees",
     exact: false,
     inNav: true,
-    component: AttendeeView
+    View: AttendeeView,
   },
   {
     path: "/attendee-add",
     name: "Attendees Add",
     exact: false,
     inNav: false,
-    component: AttendeeAddView
+    View: AttendeeAddView,
   },
   {
     path: "/accounting",
     name: "Accounting",
     exact: false,
     inNav: true,
-    component: AccountingView
-  }
+    View: AccountingView,
+  },
 ];

@@ -7,7 +7,7 @@ import "../stylesheets/calendar.css";
 import DbClient from "../components/DbClient";
 import {
   API_PATH_SESSION,
-  API_PATH_SESSION_UPDATE
+  API_PATH_SESSION_UPDATE,
 } from "../constants/endpoints";
 
 // Scheduling
@@ -37,7 +37,7 @@ export default function ScheduleModifyView() {
               end: moment(date + " " + end_time),
               value: name,
               name,
-              building: building
+              building: building,
             })
           )
         );
@@ -50,7 +50,7 @@ export default function ScheduleModifyView() {
 
   // Select event
   function selectEvent(id) {
-    const event = events.find(ev => ev.id === parseInt(id));
+    const event = events.find((ev) => ev.id === parseInt(id));
     if (event) {
       setSelectedEvent(event);
       setDate(event.start.format("YYYY-MM-DD"));
@@ -71,7 +71,7 @@ export default function ScheduleModifyView() {
           id: selectedEvent.id,
           start,
           end,
-          date
+          date,
         });
         setMessage(message);
       } catch (error) {
@@ -93,7 +93,7 @@ export default function ScheduleModifyView() {
           id="room"
           name="room"
           defaultValue=""
-          onChange={e => selectEvent(e.target.value)}
+          onChange={(e) => selectEvent(e.target.value)}
         >
           <option value="" disabled hidden>
             {" - Select event to modify - "}
@@ -114,7 +114,7 @@ export default function ScheduleModifyView() {
               type="time"
               name="start_time"
               value={start}
-              onChange={e => setStart(e.target.value)}
+              onChange={(e) => setStart(e.target.value)}
             />
 
             <label>End time</label>
@@ -122,7 +122,7 @@ export default function ScheduleModifyView() {
               type="time"
               name="end_time"
               value={end}
-              onChange={e => setEnd(e.target.value)}
+              onChange={(e) => setEnd(e.target.value)}
             />
 
             <label>Date</label>
@@ -130,14 +130,14 @@ export default function ScheduleModifyView() {
               type="date"
               name="date"
               value={date}
-              onChange={e => setDate(e.target.value)}
+              onChange={(e) => setDate(e.target.value)}
             />
 
             <br />
 
             <input
               type="submit"
-              onClick={e => handleFormSubmit(e)}
+              onClick={(e) => handleFormSubmit(e)}
               value="Submit"
             />
 
